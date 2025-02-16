@@ -15,53 +15,43 @@ This project provides a bash script to configure a Raspberry Pi as a VPN server 
 - Root privileges (run with `sudo`)
 - A registered [ZeroTier](https://my.zerotier.com) account and a created network ID
 
-## Installation
-1. Download the script:
-    ```bash
-    wget https://example.com/setup_zerotier_vpn.sh
-    ```
+## Usage
+
+### Before Running the Script:
+1. **Sign Up or Log In to ZeroTier:**
+   - Go to [https://my.zerotier.com/](https://my.zerotier.com/).
+   - Create an account or sign in if you already have one.
+2. **Create a Network:**
+   - Click on **Create a Network** to generate a unique Network ID. You'll need this when prompted by the script.
+
+### Run the Script
+
+1. Download the script at https://github.com/CochinaCoccyx/pi-zerotier-vpn/
 
 2. Make the script executable:
     ```bash
-    chmod +x setup_zerotier_vpn.sh
+    chmod +x setup_zerotier_vpn_on_pi.sh
     ```
 
 3. Run the script as root:
     ```bash
-    sudo ./setup_zerotier_vpn.sh
+    sudo ./setup_zerotier_vpn_on_pi.sh
     ```
 
-## Usage
-1. When prompted, enter your ZeroTier Network ID.
-2. Select the internet-facing interface from a numbered list (e.g., `wlan0` or `eth0`).
-3. The script will automatically:
-   - Install ZeroTier
-   - Enable and start the ZeroTier service
-   - Join the ZeroTier network
-   - Configure IP forwarding
-   - Set up `iptables` rules for NAT routing
-   - Make the `iptables` rules persistent
-
-## Example Output
-```
-=== ZeroTier VPN Server Setup on Raspberry Pi ===
-Installing ZeroTier...
-Enabling and starting ZeroTier service...
-Enter your ZeroTier Network ID: xxxxxxxx
-Joining ZeroTier network...
-
-Available network interfaces:
-[0] lo
-[1] wlan0
-[2] eth0
-Select your internet-facing interface by number: 1
-Selected interface: wlan0
-Enabling IP forwarding...
-Configuring iptables for NAT routing...
-Making iptables rules persistent...
-ZeroTier VPN server setup completed!
-Ensure you authorize the device on your ZeroTier Central dashboard.
-```
+### After Running the Script:
+1. **Authorize Your Pi Server:**
+   - Go to your ZeroTier dashboard and find the newly connected device (your Pi).
+   - Click to authorize the device, allowing it to join the network.
+2. **Enable Network Bridging:**
+   - In the device settings on ZeroTier, check the box for **Allow network bridging**.
+3. **Configure Managed Routes:**
+   - Go to the **Managed Routes** section of your ZeroTier network settings.
+     - **Local VPN Subnet:**
+       - Destination: `172.26.0.0/16`
+       - Via: (Leave empty)
+     - **Internet Traffic Routing:**
+       - Destination: `0.0.0.0/0`
+       - Via: Pi’s VPN IP (e.g., `172.26.82.11`)
 
 ## Authorizing the Device
 After running the script, visit the [ZeroTier Central dashboard](https://my.zerotier.com) and authorize your Raspberry Pi in the Members tab of your network.
