@@ -30,12 +30,12 @@ This project provides a bash script to configure a Raspberry Pi as a VPN server 
 
 2. Make the script executable:
     ```bash
-    chmod +x setup_zerotier_vpn_on_pi.sh
+    chmod +x setup_zerotier_vpn.sh
     ```
 
 3. Run the script as root:
     ```bash
-    sudo ./setup_zerotier_vpn_on_pi.sh
+    sudo ./setup_zerotier_vpn.sh
     ```
 
 ### After Running the Script:

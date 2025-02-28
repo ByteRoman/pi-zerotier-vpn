@@ -24,25 +24,6 @@ read -p "Enter your ZeroTier Network ID: " ZT_NETWORK_ID
 echo "Joining ZeroTier network..."
 zerotier-cli join $ZT_NETWORK_ID
 
-# Get available interfaces and list them with numbers
-echo "Available network interfaces:"
-interfaces=($(ip -o link show | awk -F': ' '{print $2}'))
-for i in "${!interfaces[@]}"; do
-  echo "[$i] ${interfaces[$i]}"
-done
-
-# User selects the interface by number
-while true; do
-  read -p "Select your internet-facing interface by number: " choice
-  if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 0 ] && [ "$choice" -lt "${#interfaces[@]}" ]; then
-    INTERNET_IF=${interfaces[$choice]}
-    echo "Selected interface: $INTERNET_IF"
-    break
-  else
-    echo "Invalid selection. Please choose a number from the list."
-  fi
-done
-
 # Get ZeroTier interface name
 ZT_IF=$(ip -o link show | grep "zt" | awk -F': ' '{print $2}')
 if [ -z "$ZT_IF" ]; then
@@ -50,6 +31,25 @@ if [ -z "$ZT_IF" ]; then
   exit
 fi
 echo "Detected ZeroTier interface: $ZT_IF"
+
+# Get available interfaces excluding the ZeroTier interface
+echo "Available network interfaces:"
+interfaces=($(ip -o link show | awk -F': ' '{print $2}' | grep -v "$ZT_IF"))
+for i in "${!interfaces[@]}"; do
+  echo "[$((i+1))] ${interfaces[$i]}"
+done
+
+# User selects the interface by number
+while true; do
+  read -p "Select your internet-facing interface by number: " choice
+  if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "${#interfaces[@]}" ]; then
+    INTERNET_IF=${interfaces[$((choice-1))]}
+    echo "Selected interface: $INTERNET_IF"
+    break
+  else
+    echo "Invalid selection. Please choose a number from the list."
+  fi
+done
 
 # Enable IP forwarding
 echo "Enabling IP forwarding..."
