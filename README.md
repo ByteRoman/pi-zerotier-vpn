@@ -9,6 +9,7 @@ This project provides a bash script to configure a Raspberry Pi as a VPN server 
 - Configures `iptables` for NAT routing
 - Makes `iptables` rules persistent across reboots
 - Allows user to select the internet-facing interface from a numbered list
+- Provides an easy rollback script to remove all VPN-related changes
 
 ## Requirements
 - A Raspberry Pi with Raspberry Pi OS (or other Debian-based Linux)
