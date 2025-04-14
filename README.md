@@ -83,7 +83,7 @@ sudo iptables -t nat -F
 This project is licensed under the MIT License.
 
 ## Author
-Created by CochinaCoccyx
+Created by ByteRoman
 
 ## Contributing
 Contributions are welcome! Feel free to submit a pull request or open an issue.
